@@ -6,7 +6,7 @@ from .convolution import conv_mat_extern
 from .utils import gdist_mat
 from .printing import float_string, exp_string
 
-
+#función signo
 @njit
 def sgn(x):
     if x < 0:
@@ -16,14 +16,24 @@ def sgn(x):
     else:
         return 0
 
+# ntau is the imaginary time
+# N is the number of particles
+#mu is the chemical potential
+#H0 is the non interacting hamiltonian
+# beta is the thermal energy (kb.T)^-1
+# why particle is cero? 
+# mu_jump is a coefficient in Bose Hubard Hamiltonian?
+# tolN is a tolerance
 
+#ndim and shape comes from numpy library
 @njit
 def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
-    assert H0.ndim==2, "Only constant hamiltonian"
-    assert H0.shape[0]==H0.shape[1], "Hamiltonian is a squared matrix"
+   # The assert keyword lets you test if a condition in your code returns True, if not, the program will raise an AssertionError.
+    assert H0.ndim==2, "Only constant hamiltonian" # in numpy .ndim is the same as axis/axes:
+    assert H0.shape[0]==H0.shape[1], "Hamiltonian is a squared matrix" #shape describes how many data (or the range) along each available axis.
     n_orb = H0.shape[0]
     particle_sign = (-1)**particle
-    tau = np.linspace(0, beta, ntau)
+    tau = np.linspace(0, beta, ntau) # Return evenly spaced numbers over a specified interval.
     
     assert not np.any(np.isnan(H0))
     
