@@ -29,14 +29,20 @@ def sgn(x):
 @njit
 def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
    # The assert keyword lets you test if a condition in your code returns True, if not, the program will raise an AssertionError.
-    assert H0.ndim==2, "Only constant hamiltonian" # in numpy .ndim is the same as axis/axes:
-    assert H0.shape[0]==H0.shape[1], "Hamiltonian is a squared matrix" #shape describes how many data (or the range) along each available axis.
+    # in numpy .ndim is the same as axis/axes
+    assert H0.ndim==2, "Only constant hamiltonian" 
+     #shape describes how many data (or the range) along each available axis.
+    assert H0.shape[0]==H0.shape[1], "Hamiltonian is a squared matrix"
     n_orb = H0.shape[0]
     particle_sign = (-1)**particle
     tau = np.linspace(0, beta, ntau) # Return evenly spaced numbers over a specified interval.
     
-    assert not np.any(np.isnan(H0))
+    assert not np.any(np.isnan(H0)) # np.any test whether any array element along a given axis evaluates to True.
+                                    #np.isnan tests element-wise whether it is NaN (not a Number) or not and returns the result as a boolean array
     
+    # The linalg library (from numpy) specializes in linear algebra with matrices and vectors provided by numpy.
+    # .eig --> Compute the eigenvalues and right eigenvectors of a square array
+    # .inv --> Compute the (multiplicative) inverse of a matrix.
     w, P = np.linalg.eig(H0)
     Pinv = np.linalg.inv(P)
     
@@ -46,7 +52,9 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
         while True:
             N0 = 0.0
             for jj in range(n_orb):
-                e = w[jj].real - mu
+                e = w[jj].real - mu 
+                #.real is an attribute for the complex math library in Python to obtain the real part of a complex number.
+                # e is the difference between the energies and the chemical potential
                 N0 += 1/(particle_sign - np.exp(e * beta))
             
             DN = N - N0
