@@ -30,7 +30,7 @@ def sgn(x):
 def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
    # The assert keyword lets you test if a condition in your code returns True, if not, the program will raise an AssertionError.
     # in numpy .ndim is the same as axis/axes
-    assert H0.ndim==2, "Only constant hamiltonian" 
+    assert H0.ndim==2, "Only constant hamiltonian" # dim 2 means we are working with matrices
      #shape describes how many data (or the range) along each available axis.
     assert H0.shape[0]==H0.shape[1], "Hamiltonian is a squared matrix"
     n_orb = H0.shape[0]
@@ -41,8 +41,8 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
                                     #np.isnan tests element-wise whether it is NaN (not a Number) or not and returns the result as a boolean array
     
     # The linalg library (from numpy) specializes in linear algebra with matrices and vectors provided by numpy.
-    # .eig --> Compute the eigenvalues and right eigenvectors of a square array
-    # .inv --> Compute the (multiplicative) inverse of a matrix.
+    # .eig --> Compute the eigenvalues and right eigenvectors of a square array. w (eigenvalues) , P (eigenvectors matrix; column "i" corresponds to eigenvalue"i")
+    # .inv --> Compute the (multiplicative) inverse of a matrix. 
     w, P = np.linalg.eig(H0)
     Pinv = np.linalg.inv(P)
     
@@ -55,14 +55,15 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
                 e = w[jj].real - mu 
                 #.real is an attribute for the complex math library in Python to obtain the real part of a complex number.
                 # e is the difference between the energies and the chemical potential
+                # Why is a minus sign before the exponential? Aren't we dealing with fermions?
                 N0 += 1/(particle_sign - np.exp(e * beta))
             
             DN = N - N0
             DNsign = sgn(DN)
             if abs(DN) < tolN:
                 break
-            if DNsign!=last_sign and last_sign!=2:
-                mu_jump /= 2
+            if DNsign!=last_sign and last_sign!=2: # != --> does not equal 
+                mu_jump /= 2 # x /= 2 equivalent to x = x / 2
             mu += DNsign * mu_jump
             last_sign = DNsign
     
