@@ -32,8 +32,8 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
     # in numpy .ndim is the same as axis/axes
     assert H0.ndim==2, "Only constant hamiltonian" # dim 2 means we are working with matrices
      #shape describes how many data (or the range) along each available axis.
-    assert H0.shape[0]==H0.shape[1], "Hamiltonian is a squared matrix"
-    n_orb = H0.shape[0]
+    assert H0.shape[0]==H0.shape[1], "Hamiltonian is a squared matrix" # 0--> rows , 1--> columns
+    n_orb = H0.shape[0] #number of rows
     particle_sign = (-1)**particle
     tau = np.linspace(0, beta, ntau) # Return evenly spaced numbers over a specified interval.
     
@@ -51,7 +51,7 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
         print("Checking number of particle for non-interacting case")
         while True:
             N0 = 0.0
-            for jj in range(n_orb):
+            for jj in range(n_orb): # range(start, stop, step) start--> 0 ( by default) ; step-->1 (by default); stop ( not included in the sequence).
                 e = w[jj].real - mu 
                 #.real is an attribute for the complex math library in Python to obtain the real part of a complex number.
                 # e is the difference between the energies and the chemical potential
@@ -66,8 +66,9 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
                 mu_jump /= 2 # x /= 2 equivalent to x = x / 2
             mu += DNsign * mu_jump
             last_sign = DNsign
-    
-    g = np.zeros((ntau, H0.shape[0], H0.shape[1]), dtype=np.complex128)
+            
+    # numpy.zeros(shape, dtype=float, order='C', *, like=None)
+    g = np.zeros((ntau, H0.shape[0], H0.shape[1]), dtype=np.complex128) #np.zeros--> Return a new array of given shape and type, filled with zeros. # 128-bit complex floating-point number
     for ii in range(n_orb):
         for jj in range(n_orb):
             for kk in range(n_orb):
@@ -78,6 +79,7 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
         print("Warning: possible overload on non-interactive green's function")
     return g, mu
 
+###########################################################################
 
 @njit
 def matsubara_branch_init(N, mu, H0, G, S, vP, W, E, v, interpol, beta=1, particle=0, mu_jump=0.5, max_iter=100000, tol=1e-6):
@@ -133,7 +135,7 @@ def matsubara_branch_init(N, mu, H0, G, S, vP, W, E, v, interpol, beta=1, partic
     
     return mu
 
-
+############################################################################################################
 @njit
 def matsubara_branch_init_gw0(N, mu, H0, G, S, v, interpol, beta=1, particle=0, mu_jump=0.5, max_iter=100000, tol=1e-6):
     print("Initilizing Matsubara branch")
@@ -195,7 +197,7 @@ def matsubara_branch_init_gw0(N, mu, H0, G, S, v, interpol, beta=1, particle=0, 
     
     return mu
 
-
+#################################################################################################################
 @njit
 def non_interactive_matsubara_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, beta=1, particle=0, mu_jump=0.5, tol=1e-6):
     print("Estimating Matsubara branch for non-interactive case")
@@ -232,7 +234,7 @@ def non_interactive_matsubara_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, beta=
 
     return mu
 
-
+###############################################################################
 @njit
 def matsubara_branch_init_gw0_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, Pk, S, v, interpol, beta=1, particle=0, mu_jump=0.5, max_iter=100000, tol=1e-6):
     print("Initilizing Matsubara branch")
@@ -318,7 +320,7 @@ def matsubara_branch_init_gw0_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, Pk, S
     
     return mu
 
-
+######################################################
 
 @njit
 def matsubara_branch_init_hf_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, S, v, interpol, beta=1, particle=0, mu_jump=0.5, max_iter=100000, tol=1e-6):
