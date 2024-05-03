@@ -21,7 +21,7 @@ def sgn(x):
 #mu is the chemical potential
 #H0 is the non interacting hamiltonian
 # beta is the thermal energy (kb.T)^-1
-# why particle is cero? 
+# why particle is cero? 0--> boson, 1--> fermion
 # mu_jump is a coefficient in Bose Hubard Hamiltonian?
 # tolN is a tolerance
 
@@ -36,6 +36,7 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
     n_orb = H0.shape[0] #number of rows
     particle_sign = (-1)**particle
     tau = np.linspace(0, beta, ntau) # Return evenly spaced numbers over a specified interval.
+    #ntau es el número de elementos del array 
     
     assert not np.any(np.isnan(H0)) # np.any test whether any array element along a given axis evaluates to True.
                                     #np.isnan tests element-wise whether it is NaN (not a Number) or not and returns the result as a boolean array
@@ -47,6 +48,7 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
     Pinv = np.linalg.inv(P)
     
     last_sign = 2
+    # Para cuando no es necesario ajustar la mu.
     if N>0:
         print("Checking number of particle for non-interacting case")
         while True:
@@ -56,7 +58,7 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
                 #.real is an attribute for the complex math library in Python to obtain the real part of a complex number.
                 # e is the difference between the energies and the chemical potential
                 # Why is a minus sign before the exponential? Aren't we dealing with fermions?
-                N0 += 1/(particle_sign - np.exp(e * beta))
+                N0 -= 1/(particle_sign - np.exp(e * beta))
             
             DN = N - N0
             DNsign = sgn(DN)
@@ -74,7 +76,7 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
             for kk in range(n_orb):
                 e = w[jj] - mu
                 g[...,ii,kk] += P[ii,jj] * np.exp(-e*tau)/(particle_sign * np.exp(-e*beta) - 1) * Pinv[jj,kk] # P[kk,jj].conjugate()
-    
+    # es para que esté en la base del hamiltoniano
     if np.any(np.abs(g) > 1e14):
         print("Warning: possible overload on non-interactive green's function")
     return g, mu
