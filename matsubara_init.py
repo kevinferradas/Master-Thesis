@@ -71,12 +71,13 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
             
     # numpy.zeros(shape, dtype=float, order='C', *, like=None)
     g = np.zeros((ntau, H0.shape[0], H0.shape[1]), dtype=np.complex128) #np.zeros--> Return a new array of given shape and type, filled with zeros. # 128-bit complex floating-point number
+    # bucles anidados para completar los elementos de una matriz.
     for ii in range(n_orb):
         for jj in range(n_orb):
             for kk in range(n_orb):
                 e = w[jj] - mu
                 g[...,ii,kk] += P[ii,jj] * np.exp(-e*tau)/(particle_sign * np.exp(-e*beta) - 1) * Pinv[jj,kk] # P[kk,jj].conjugate()
-    # es para que esté en la base del hamiltoniano
+    # es para que esté en la base del hamiltoniano.
     if np.any(np.abs(g) > 1e14):
         print("Warning: possible overload on non-interactive green's function")
     return g, mu
