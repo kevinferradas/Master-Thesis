@@ -77,7 +77,9 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
             for kk in range(n_orb):
                 e = w[jj] - mu
                 g[...,ii,kk] += P[ii,jj] * np.exp(-e*tau)/(particle_sign * np.exp(-e*beta) - 1) * Pinv[jj,kk] # P[kk,jj].conjugate()
-    # es para que esté en la base del hamiltoniano.
+                # We obtain the matrix element gik for the green function in the basis of the hamiltonian
+                # g(tau)= np.exp(-e*tau)/(particle_sign * np.exp(-e*beta) - 1) is eqn. 202 . Is diagonal!
+    
     if np.any(np.abs(g) > 1e14):
         print("Warning: possible overload on non-interactive green's function")
     return g, mu
