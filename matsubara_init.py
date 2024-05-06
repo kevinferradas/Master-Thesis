@@ -25,10 +25,10 @@ def sgn(x):
 # mu_jump is the variation in the chemical potential
 # tolN is a tolerance
 
-#ndim and shape comes from numpy library
+#ndim and shape comes from numpy library.
 @njit
 def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
-   # The assert keyword lets you test if a condition in your code returns True, if not, the program will raise an AssertionError.
+   ## The assert keyword lets you test if a condition in your code returns True, if not, the program will raise an AssertionError.
     # in numpy .ndim is the same as axis/axes
     assert H0.ndim==2, "Only constant hamiltonian" # dim 2 means we are working with matrices
      #shape describes how many data (or the range) along each available axis.
@@ -36,24 +36,24 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
     n_orb = H0.shape[0] #number of rows
     particle_sign = (-1)**particle
     tau = np.linspace(0, beta, ntau) # Return evenly spaced numbers over a specified interval.
-    #ntau es el número de elementos del array 
     
-    assert not np.any(np.isnan(H0)) # np.any test whether any array element along a given axis evaluates to True.
-                                    #np.isnan tests element-wise whether it is NaN (not a Number) or not and returns the result as a boolean array
     
-    # The linalg library (from numpy) specializes in linear algebra with matrices and vectors provided by numpy.
+    assert not np.any(np.isnan(H0)) ## np.any test whether any array element along a given axis evaluates to True.
+                                    ##np.isnan tests element-wise whether it is NaN (not a Number) or not and returns the result as a boolean array
+    
+    ## The linalg library (from numpy) specializes in linear algebra with matrices and vectors provided by numpy.
     # .eig --> Compute the eigenvalues and right eigenvectors of a square array. w (eigenvalues) , P (eigenvectors matrix; column "i" corresponds to eigenvalue"i")
     # .inv --> Compute the (multiplicative) inverse of a matrix. 
     w, P = np.linalg.eig(H0)
     Pinv = np.linalg.inv(P)
     
-    last_sign = 2
-    # Para cuando no es necesario ajustar la mu.
+    last_sign = 2 # is a parameter used to adjust the value of mu
+  
     if N>0:
         print("Checking number of particle for non-interacting case")
         while True:
-            N0 = 0.0
-            for jj in range(n_orb): # range(start, stop, step) start--> 0 ( by default) ; step-->1 (by default); stop ( not included in the sequence).
+            N0 = 0.0 # N0 is the expected number of particles
+            for jj in range(n_orb): ## range(start, stop, step) start--> 0 ( by default) ; step-->1 (by default); stop ( not included in the sequence).
                 e = w[jj].real - mu 
                 #.real is an attribute for the complex math library in Python to obtain the real part of a complex number.
                 # e is the difference between the energies and the chemical potential
