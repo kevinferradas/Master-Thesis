@@ -16,13 +16,13 @@ def sgn(x):
     else:
         return 0
 
-# ntau is the imaginary time
-# N is the number of particles
-#mu is the chemical potential
+# ntau is the number of partitions between zero and beta
+# N is the (desired) number of particles
+#mu is the chemical potential (initial value)
 #H0 is the non interacting hamiltonian
 # beta is the thermal energy (kb.T)^-1
-# why particle is cero? 0--> boson, 1--> fermion
-# mu_jump is a coefficient in Bose Hubard Hamiltonian?
+#  particle : 0--> boson, 1--> fermion
+# mu_jump is the variation in the chemical potential
 # tolN is a tolerance
 
 #ndim and shape comes from numpy library
