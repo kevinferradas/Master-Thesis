@@ -57,10 +57,10 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
                 e = w[jj].real - mu 
                 #.real is an attribute for the complex math library in Python to obtain the real part of a complex number.
                 # e is the difference between the energies and the chemical potential
-                # Why is a minus sign before the exponential? Aren't we dealing with fermions?
-                N0 -= 1/(particle_sign - np.exp(e * beta))
+                
+                N0 -= 1/(particle_sign - np.exp(e * beta)) # N0=-tr (G^M(beta)) . The expresion comes from replacing t=beta in eq. 202.
             
-            DN = N - N0
+            DN = N - N0 # differential of the number of particles 
             DNsign = sgn(DN)
             if abs(DN) < tolN:
                 break
