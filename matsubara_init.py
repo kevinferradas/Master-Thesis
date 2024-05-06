@@ -71,7 +71,7 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
             
     # numpy.zeros(shape, dtype=float, order='C', *, like=None)
     g = np.zeros((ntau, H0.shape[0], H0.shape[1]), dtype=np.complex128) #np.zeros--> Return a new array of given shape and type, filled with zeros. # 128-bit complex floating-point number
-    # bucles anidados para completar los elementos de una matriz.
+    # Nested loops to complete the elements of an array.
     for ii in range(n_orb):
         for jj in range(n_orb):
             for kk in range(n_orb):
