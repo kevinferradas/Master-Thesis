@@ -284,7 +284,7 @@ def matsubara_branch_init_gw0_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, Pk, S
             for kk in range(nkvec):
                 # print("Initializing Dyson for k index ", kk)
                 k_vec = lattice.get_vec(kk)
-                HkMF = H0 + 2*H0_kin[0]*np.cos(k_vec[0]) + 2*H0_kin[1]*np.cos(k_vec[1]) + 2*H0_kin[2]*np.cos(k_vec[2]) - mu*np.eye(H0.shape[0]) + S.get_hf()[0]
+                HkMF = H0 + 2*H0_kin[0]*np.cos(k_vec[0]) + 2*H0_kin[1]*np.cos(k_vec[1]) + 2*H0_kin[2]*np.cos(k_vec[2]) + S.get_hf()[0]
                 g,no_use = g_nonint_init(ntau, -1, mu, HkMF, beta, particle)
                 # print("Mean field Green's function computed")
                 F = conv_mat_extern(g, S.get_mat(), interpol, htau, matrix_matrix, particle)
@@ -352,7 +352,7 @@ def matsubara_branch_init_hf_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, S, v, 
             newGlocM = np.zeros_like(Gloc.get_mat())
             for kk in range(nkvec):
                 k_vec = lattice.get_vec(kk)
-                HkMF = H0 + 2*H0_kin[0]*np.cos(k_vec[0]) + 2*H0_kin[1]*np.cos(k_vec[1]) + 2*H0_kin[2]*np.cos(k_vec[2]) - mu*np.eye(H0.shape[0]) + S.get_hf()[0]
+                HkMF = H0 + 2*H0_kin[0]*np.cos(k_vec[0]) + 2*H0_kin[1]*np.cos(k_vec[1]) + 2*H0_kin[2]*np.cos(k_vec[2]) + S.get_hf()[0]
                 g,no_use = g_nonint_init(ntau, -1, mu, HkMF, beta, particle)
                 Gk[kk].set_mat(g)
                 newGlocM += Gk[kk].get_mat() / nkvec
