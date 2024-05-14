@@ -1,0 +1,12 @@
+# Green's function parameters
+++n      = 1  # Real time steps
+++ntau   = 200   # Imaginary time steps
+--h      = 0.02 # Timestep interval
+--beta   = 8.0  # Inverse temperature
+++k      = 4    # Interpolator order
+--N      = 1.005    # Number of electrons
+++nkvec  = 8    # Number of k samples per axis
+
+# Hamiltonian parameters
+--hop    = 1.2  # Hopping
+--U      = 1.9  # Interaction integral
