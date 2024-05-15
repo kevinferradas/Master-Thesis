@@ -19,11 +19,11 @@ spec = [('n', int32),
 class Gmatrix:
     """
     """
-    
-    def __init__(self, n, ntau, orb, particle_type):
+    #_init_ is a method of the class
+    def __init__(self, n, ntau, orb, particle_type): # def __init__(self, attr1, attr2,...)
         
         if particle_type==0:
-            self.particle_sign = +1
+            self.particle_sign = +1   # “self” refers to the instance (object) of the class that is currently being used.
         elif particle_type==1:
             self.particle_sign = -1
         self.particle_type = particle_type
