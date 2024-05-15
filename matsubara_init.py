@@ -203,6 +203,20 @@ def matsubara_branch_init_gw0(N, mu, H0, G, S, v, interpol, beta=1, particle=0, 
     return mu
 
 #################################################################################################################
+
+# N is the (desired) number of particles
+#mu is the chemical potential (initial value)
+#H0 is the local part of the non interacting hamiltonian
+#H0_kin is the hopping kinetic term of the non interacting hamiltonian
+# Gloc--> Gmatrix
+#Gk--> List of Gmatrix
+# beta is the thermal energy (kb.T)^-1
+#  particle : 0--> boson, 1--> fermion
+# mu_jump is the variation in the chemical potential
+# tolN is a tolerance
+# ntau is the number of partitions between zero and beta
+
+
 @njit
 def non_interactive_matsubara_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, beta=1, particle=0, mu_jump=0.5, tol=1e-6):
     print("Estimating Matsubara branch for non-interactive case")
