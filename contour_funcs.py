@@ -28,18 +28,21 @@ class Gmatrix:
             self.particle_sign = -1
         self.particle_type = particle_type
         
-        self.GM = np.zeros((ntau, orb, orb), dtype=np.complex128)
-        self.GI = np.zeros((n, ntau, orb, orb), dtype=np.complex128)
+        self.GM = np.zeros((ntau, orb, orb), dtype=np.complex128) # shape=3?
+        self.GI = np.zeros((n, ntau, orb, orb), dtype=np.complex128)#shape=4?
         self.GR = np.zeros((n, n, orb, orb), dtype=np.complex128)
         self.GL = np.zeros((n, n, orb, orb), dtype=np.complex128)
         
         self.Ghf = np.zeros((n, orb, orb), dtype=np.complex128)
     
+        #Is the step below necessary?
     
     def get_particle(self):
         return self.particle_type
     def init_mat(self):
-        self.GM = np.zeros_like(self.GM)
+        self.GM = np.zeros_like(self.GM) # Return an array of zeros with the same shape and type as a given array.
+
+
     def init_lmx(self):
         self.GI = np.zeros_like(self.GI)
     def init_ret(self):
