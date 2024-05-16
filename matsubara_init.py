@@ -208,7 +208,7 @@ def matsubara_branch_init_gw0(N, mu, H0, G, S, v, interpol, beta=1, particle=0, 
 #mu is the chemical potential (initial value)
 #H0 is the local part of the non interacting hamiltonian
 #H0_kin is the hopping kinetic term of the non interacting hamiltonian
-# Gloc--> Gmatrix
+# Gloc--> Is an instance (object) of the class Gmatrix
 #Gk--> List of Gmatrix
 # beta is the thermal energy (kb.T)^-1
 #  particle : 0--> boson, 1--> fermion
@@ -220,7 +220,7 @@ def matsubara_branch_init_gw0(N, mu, H0, G, S, v, interpol, beta=1, particle=0, 
 @njit
 def non_interactive_matsubara_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, beta=1, particle=0, mu_jump=0.5, tol=1e-6):
     print("Estimating Matsubara branch for non-interactive case")
-    ntau = Gloc.get_mat().shape[0]
+    ntau = Gloc.get_mat().shape[0] # .get_mat() returns 
     nkvec = len(Gk)
 
     last_sign = 2
