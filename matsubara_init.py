@@ -220,7 +220,7 @@ def matsubara_branch_init_gw0(N, mu, H0, G, S, v, interpol, beta=1, particle=0, 
 @njit
 def non_interactive_matsubara_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, beta=1, particle=0, mu_jump=0.5, tol=1e-6):
     print("Estimating Matsubara branch for non-interactive case")
-    ntau = Gloc.get_mat().shape[0] # .get_mat() returns 
+    ntau = Gloc.get_mat().shape[0] # .get_mat() returns Matsubara green function full of zeros ( dim=3 array)
     nkvec = len(Gk)
 
     last_sign = 2
