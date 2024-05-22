@@ -86,7 +86,7 @@ Hloc = np.zeros((2,2), dtype=np.complex128)
 
 
 mu = negf.matsubara_branch_init_hf_kspace(N, 0, k_lattice, Hloc, Hkin, Gk, Gloc, S, Vloc, interp, beta, 1)
-np.savetxt("Gloc_mat_up", Gloc.get_mat()[:,0,0])
+np.savetxt("Gloc_mat_up", Gloc.get_mat()[:,0,0]) # savetxt --> Save an array to a text file.
 np.savetxt("Gloc_mat_dn", Gloc.get_mat()[:,1,1])
 
 
