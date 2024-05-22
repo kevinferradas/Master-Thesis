@@ -35,8 +35,7 @@ class Gmatrix:
         
         self.Ghf = np.zeros((n, orb, orb), dtype=np.complex128)
     
-        #Is the step below necessary?
-        #There is no step below on this method!!!
+       
     
     def get_particle(self):
         return self.particle_type
