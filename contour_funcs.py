@@ -36,7 +36,7 @@ class Gmatrix:
         self.Ghf = np.zeros((n, orb, orb), dtype=np.complex128)
     
        
-    
+    # Additional methods for this class.
     def get_particle(self):
         return self.particle_type
     def init_mat(self):
