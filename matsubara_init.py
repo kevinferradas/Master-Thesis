@@ -16,7 +16,7 @@ def sgn(x):
     else:
         return 0
 
-# ntau is the number of partitions between zero and beta
+# ntau is the number of elements of the list tau. Then, ntau determines the space between each element of the list.
 # N is the (desired) number of particles
 #mu is the chemical potential (initial value)
 #H0 is the non interacting hamiltonian
@@ -71,8 +71,9 @@ def g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
             
     # numpy.zeros(shape, dtype=float, order='C', *, like=None)
     g = np.zeros((ntau, H0.shape[0], H0.shape[1]), dtype=np.complex128) #np.zeros--> Return a new array of given shape and type, filled with zeros. # 128-bit complex floating-point number
+    # dim(g)=3
     # Nested loops to complete the elements of an array.
-    for ii in range(n_orb):
+    for ii in range(n_orb): # n_orb = H0.shape[0]
         for jj in range(n_orb):
             for kk in range(n_orb):
                 e = w[jj] - mu
@@ -226,7 +227,7 @@ def non_interactive_matsubara_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, beta=
     last_sign = 2
     while True:
         newGlocM = np.zeros_like(Gloc.get_mat())
-        for kk in range(nkvec):
+        for kk in range(nkvec): 
             k_vec = lattice.get_vec(kk)
             Hk0 = H0 + 2*H0_kin[0]*np.cos(k_vec[0]) + 2*H0_kin[1]*np.cos(k_vec[1]) + 2*H0_kin[2]*np.cos(k_vec[2]) - mu*np.eye(H0.shape[0])
             assert not np.any(np.isnan(Hk0))
