@@ -212,7 +212,7 @@ def matsubara_branch_init_gw0(N, mu, H0, G, S, v, interpol, beta=1, particle=0, 
 #H0 is the local part of the non interacting hamiltonian
 #H0_kin is the hopping kinetic term of the non interacting hamiltonian. Is represented as a list of three diagonal matrices, one for each dimension.
 # Gloc--> Is an instance (object) of the class Gmatrix
-#Gk--> List of Gmatrix
+#Gk--> List of Gmatrix objects.
 # beta is the thermal energy (kb.T)^-1
 #  particle : 0--> boson, 1--> fermion
 # mu_jump is the variation in the chemical potential
@@ -235,13 +235,15 @@ def non_interactive_matsubara_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, beta=
                                                                          #np.eye(N)--> Return a 2-D array of N X N with ones on the diagonal and zeros elsewhere.
             assert not np.any(np.isnan(Hk0))
             assert np.all(np.abs(Hk0) < 1e14)
-            Gk[kk].set_mat(g_nonint_init(ntau, -1, mu, Hk0, beta, particle)[0])
-            newGlocM += Gk[kk].get_mat() / nkvec
-        Gloc.set_mat(newGlocM)
+            Gk[kk].set_mat(g_nonint_init(ntau, -1, mu, Hk0, beta, particle)[0])  # g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
+                                                                              # set_mat(self, GM): assert GM.shape == self.GM.shape --> self.GM = np.copy(GM)
+                                                                              # since N < 0, mu does not change.
+            newGlocM += Gk[kk].get_mat() / nkvec #  returns the new self.GM, that is self.GM=np.copy(g) #eqn. 299, with i=j. 
+        Gloc.set_mat(newGlocM) # self.GM = np.copy(newGlocM)
         
-        print("Non-interactive gloc approximated for mu="+float_string(mu, 5))
+        print("Non-interactive gloc approximated for mu="+float_string(mu, 5)) # mu with 5 digits of precision.
         
-        N0 = -np.trace(Gloc.get_mat()[-1])
+        N0 = -np.trace(Gloc.get_mat()[-1]) # -1 corresponds to the last element of the list. Why -1?
         DN = N - N0.real
         DNsign = sgn(DN)
         if abs(DN) < tol:
