@@ -210,7 +210,7 @@ def matsubara_branch_init_gw0(N, mu, H0, G, S, v, interpol, beta=1, particle=0, 
 # N is the (desired) number of particles
 #mu is the chemical potential (initial value)
 #H0 is the local part of the non interacting hamiltonian
-#H0_kin is the hopping kinetic term of the non interacting hamiltonian
+#H0_kin is the hopping kinetic term of the non interacting hamiltonian. Is represented as a list of three diagonal matrices, one for each dimension.
 # Gloc--> Is an instance (object) of the class Gmatrix
 #Gk--> List of Gmatrix
 # beta is the thermal energy (kb.T)^-1
@@ -223,15 +223,16 @@ def matsubara_branch_init_gw0(N, mu, H0, G, S, v, interpol, beta=1, particle=0, 
 @njit
 def non_interactive_matsubara_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, beta=1, particle=0, mu_jump=0.5, tol=1e-6):
     print("Estimating Matsubara branch for non-interactive case")
-    ntau = Gloc.get_mat().shape[0] # .get_mat() returns Matsubara green function full of zeros ( dim=3 array)
+    ntau = Gloc.get_mat().shape[0] # .get_mat() returns self.GM = np.zeros((ntau, orb, orb), dtype=np.complex128) ( dim=3 array) 
     nkvec = len(Gk)
 
     last_sign = 2
     while True:
         newGlocM = np.zeros_like(Gloc.get_mat())
         for kk in range(nkvec): 
-            k_vec = lattice.get_vec(kk)
-            Hk0 = H0 + 2*H0_kin[0]*np.cos(k_vec[0]) + 2*H0_kin[1]*np.cos(k_vec[1]) + 2*H0_kin[2]*np.cos(k_vec[2]) - mu*np.eye(H0.shape[0])
+            k_vec = lattice.get_vec(kk) #wave vector 
+            Hk0 = H0 + 2*H0_kin[0]*np.cos(k_vec[0]) + 2*H0_kin[1]*np.cos(k_vec[1]) + 2*H0_kin[2]*np.cos(k_vec[2]) - mu*np.eye(H0.shape[0]) # nearest neighbors approx.
+                                                                         #np.eye(N)--> Return a 2-D array of N X N with ones on the diagonal and zeros elsewhere.
             assert not np.any(np.isnan(Hk0))
             assert np.all(np.abs(Hk0) < 1e14)
             Gk[kk].set_mat(g_nonint_init(ntau, -1, mu, Hk0, beta, particle)[0])
