@@ -113,7 +113,7 @@ class Gmatrix:
     
     def set_mat(self, GM):
         assert GM.shape == self.GM.shape
-        self.GM = np.copy(GM)
+        self.GM = np.copy(GM) # np.copy(GM) Return an array copy of the given object, in this case GM.
     def set_lmx(self, GI):
         assert GI.shape == self.GI.shape
         self.GI = np.copy(GI)
