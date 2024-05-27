@@ -209,6 +209,7 @@ def matsubara_branch_init_gw0(N, mu, H0, G, S, v, interpol, beta=1, particle=0, 
 
 # N is the (desired) number of particles
 #mu is the chemical potential (initial value)
+#lattice is an instance (object) of the class Lattice.
 #H0 is the local part of the non interacting hamiltonian
 #H0_kin is the hopping kinetic term of the non interacting hamiltonian. Is represented as a list of three diagonal matrices, one for each dimension.
 # Gloc--> Is an instance (object) of the class Gmatrix
@@ -241,7 +242,9 @@ def non_interactive_matsubara_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, beta=
             # set_mat(self, g): 1. assert g.shape == self.GM.shape --> 2. self.GM = np.copy(g)
             # since N < 0, mu does not change.                                                                     
                 
-            newGlocM += Gk[kk].get_mat() / nkvec #  returns the new self.GM, that is self.GM=np.copy(g) #eqn. 299, with i=j. 
+            newGlocM += Gk[kk].get_mat() / nkvec 
+            #  returns the new self.GM, that is self.GM=np.copy(g) #eqn. 299, with i=j. 
+            # Is nkvec equal to the number of lattice sites?
         Gloc.set_mat(newGlocM) # self.GM = np.copy(newGlocM)
         
         print("Non-interactive gloc approximated for mu="+float_string(mu, 5)) # mu with 5 digits of precision.
