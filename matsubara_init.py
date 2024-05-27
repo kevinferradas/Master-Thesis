@@ -245,11 +245,11 @@ def non_interactive_matsubara_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, beta=
             newGlocM += Gk[kk].get_mat() / nkvec 
             #  returns the new self.GM, that is self.GM=np.copy(g) #eqn. 299, with i=j. 
             # Is nkvec equal to the number of lattice sites?
-        Gloc.set_mat(newGlocM) # self.GM = np.copy(newGlocM) # After this sterp, self.GM is our G local (eq.299) 
+        Gloc.set_mat(newGlocM) # self.GM = np.copy(newGlocM) # After this step, self.GM is our G local (eq.299) 
         
         print("Non-interactive gloc approximated for mu="+float_string(mu, 5)) # mu with 5 digits of precision.
         
-        N0 = -np.trace(Gloc.get_mat()[-1]) # -1 corresponds to the last element of the list. Why -1?
+        N0 = -np.trace(Gloc.get_mat()[-1]) ## N0=-tr (G^M(beta)) 
         DN = N - N0.real
         DNsign = sgn(DN)
         if abs(DN) < tol:
