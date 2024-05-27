@@ -233,11 +233,14 @@ def non_interactive_matsubara_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, beta=
             k_vec = lattice.get_vec(kk) #wave vector 
             Hk0 = H0 + 2*H0_kin[0]*np.cos(k_vec[0]) + 2*H0_kin[1]*np.cos(k_vec[1]) + 2*H0_kin[2]*np.cos(k_vec[2]) - mu*np.eye(H0.shape[0]) # nearest neighbors approx.
                                                                          #np.eye(N)--> Return a 2-D array of N X N with ones on the diagonal and zeros elsewhere.
+                                                                         # The term - mu*np.eye(H0.shape[0]) should be erased. 
             assert not np.any(np.isnan(Hk0))
             assert np.all(np.abs(Hk0) < 1e14)
-            Gk[kk].set_mat(g_nonint_init(ntau, -1, mu, Hk0, beta, particle)[0])  # g_nonint_init(ntau, N, mu, H0, beta=1, particle=0, mu_jump=0.5, tolN=1e-6):
-                                                                              # set_mat(self, GM): assert GM.shape == self.GM.shape --> self.GM = np.copy(GM)
-                                                                              # since N < 0, mu does not change.
+            Gk[kk].set_mat(g_nonint_init(ntau, -1, mu, Hk0, beta, particle)[0]) 
+            # g_nonint_init()[0] returns g; # g.shape= (ntau, Hk0.shape[0], Hk0.shape[1])
+            # set_mat(self, g): 1. assert g.shape == self.GM.shape --> 2. self.GM = np.copy(g)
+            # since N < 0, mu does not change.                                                                     
+                
             newGlocM += Gk[kk].get_mat() / nkvec #  returns the new self.GM, that is self.GM=np.copy(g) #eqn. 299, with i=j. 
         Gloc.set_mat(newGlocM) # self.GM = np.copy(newGlocM)
         
