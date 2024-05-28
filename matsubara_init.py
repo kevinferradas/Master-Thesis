@@ -234,11 +234,11 @@ def non_interactive_matsubara_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, beta=
             k_vec = lattice.get_vec(kk) #wave vector 
             Hk0 = H0 + 2*H0_kin[0]*np.cos(k_vec[0]) + 2*H0_kin[1]*np.cos(k_vec[1]) + 2*H0_kin[2]*np.cos(k_vec[2]) - mu*np.eye(H0.shape[0]) # nearest neighbors approx.
                                                                          #np.eye(N)--> Return a 2-D array of N X N with ones on the diagonal and zeros elsewhere.
-                                                                         # The term - mu*np.eye(H0.shape[0]) should be erased. 
+                                                                         # The term - mu*np.eye(H0.shape[0]) should be erased!!
             assert not np.any(np.isnan(Hk0))
             assert np.all(np.abs(Hk0) < 1e14)
             Gk[kk].set_mat(g_nonint_init(ntau, -1, mu, Hk0, beta, particle)[0]) 
-            # g_nonint_init()[0] returns g; # g.shape= (ntau, Hk0.shape[0], Hk0.shape[1])
+            # g_nonint_init()[0] returns g; # g.shape= (ntau, Hk0.shape[0], Hk0.shape[1]) 
             # set_mat(self, g): 1. assert g.shape == self.GM.shape --> 2. self.GM = np.copy(g)
             # since N < 0, mu does not change.                                                                     
                 
@@ -353,10 +353,26 @@ def matsubara_branch_init_gw0_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, Pk, S
 
 ######################################################
 
+# N is the (desired) number of particles
+#mu is the chemical potential (initial value)
+#lattice is an instance (object) of the class Lattice (lattice.py)
+#H0 is the local part of the non interacting hamiltonian
+#H0_kin is the hopping kinetic term of the non interacting hamiltonian. Is represented as a list of three diagonal matrices, one for each spatial dimensions (x,y,z) 
+# Gloc--> Is an instance (object) of the class Gmatrix
+#Gk--> List of Gmatrix objects.
+#S -->  Self energy
+#v-->
+#interpol
+# beta is the thermal energy (kb.T)^-1
+#  particle : 0--> boson, 1--> fermion
+# mu_jump is the variation in the chemical potential
+# tolN is a tolerance
+# ntau is the number of time steps between  zero and beta.
+
 @njit
 def matsubara_branch_init_hf_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, S, v, interpol, beta=1, particle=0, mu_jump=0.5, max_iter=100000, tol=1e-6):
     print("Initilizing Matsubara branch")
-    ntau = Gloc.get_mat().shape[0]
+    ntau = Gloc.get_mat().shape[0] # .get_mat() returns self.GM = np.zeros((ntau, orb, orb), dtype=np.complex128) ( dim=3 array) 
     # norb = Gloc.get_mat().shape[1]
     nkvec = len(Gk)
     particle_sign = (-1)**particle
@@ -379,7 +395,12 @@ def matsubara_branch_init_hf_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, S, v, 
             for kk in range(nkvec):
                 k_vec = lattice.get_vec(kk)
                 HkMF = H0 + 2*H0_kin[0]*np.cos(k_vec[0]) + 2*H0_kin[1]*np.cos(k_vec[1]) + 2*H0_kin[2]*np.cos(k_vec[2]) + S.get_hf()[0]
+                #HkMF --> Mean field Hamiltonian in the momentum space
+                # nearest neighbors approx.
+                #S.get_hf()[0]--> return self.Ghf --> self.Ghf = np.zeros((n, orb, orb), dtype=np.complex128) # 0 means the initial time S is taken.
+            assert not np.any(np.isnan(Hk0))
                 g,no_use = g_nonint_init(ntau, -1, mu, HkMF, beta, particle)
+                #g--> green functions matrix , no_use--> mu (chemical potential)
                 Gk[kk].set_mat(g)
                 newGlocM += Gk[kk].get_mat() / nkvec
             # print("Gloc set")
