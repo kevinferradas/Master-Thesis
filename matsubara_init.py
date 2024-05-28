@@ -388,12 +388,16 @@ def matsubara_branch_init_hf_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, S, v, 
         print("Starting Matsubara loop for mu="+float_string(mu, 5))
         while conv>=tol:
             
-            S.set_hf_loc(0, -particle_sign * matrix_tensor(Gloc.get_mat()[-1], v-np.swapaxes(v, -1, -2)))
+            S.set_hf_loc(0, -particle_sign * matrix_tensor(Gloc.get_mat()[-1], v-np.swapaxes(v, -1, -2))) #Eq.172  #This defines de Hartree-Fock self-energy at (imaginary?)time 0.
+              # def set_hf_loc(self, t, arr):
+            # assert arr.shape == self.Ghf[0].shape
+             #self.Ghf[t] = arr
+            # self.Ghf = np.zeros((n, orb, orb), dtype=np.complex128)
             # print("Hartree-Fock self-energy set")
             
             newGlocM = np.zeros_like(Gloc.get_mat())
             for kk in range(nkvec):
-                k_vec = lattice.get_vec(kk)
+                k_vec = lattice.get_vec(kk) #wave vector k 
                 HkMF = H0 + 2*H0_kin[0]*np.cos(k_vec[0]) + 2*H0_kin[1]*np.cos(k_vec[1]) + 2*H0_kin[2]*np.cos(k_vec[2]) + S.get_hf()[0]
                 #HkMF --> Mean field Hamiltonian in the momentum space
                 # nearest neighbors approx.
