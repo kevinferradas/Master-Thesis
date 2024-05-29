@@ -243,6 +243,7 @@ def non_interactive_matsubara_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, beta=
             # since N < 0, mu does not change.                                                                     
                 
             newGlocM += Gk[kk].get_mat() / nkvec 
+            # For each imaginary time, there is a sum, over all available k's, of Matsubara's Green function Matrices 
             #  returns the new self.GM, that is self.GM=np.copy(g) #eqn. 299, with i=j. 
             # Is nkvec equal to the number of lattice sites?
         Gloc.set_mat(newGlocM) # self.GM = np.copy(newGlocM) # After this step, self.GM is our G local (eq.299) 
