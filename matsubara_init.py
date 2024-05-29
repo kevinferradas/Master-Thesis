@@ -360,8 +360,8 @@ def matsubara_branch_init_gw0_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, Pk, S
 #H0_kin is the hopping kinetic term of the non interacting hamiltonian. Is represented as a list of three diagonal matrices, one for each spatial dimensions (x,y,z) 
 # Gloc--> Is an instance (object) of the class Gmatrix
 #Gk--> List of Gmatrix objects.
-#S -->  Self energy
-#v-->
+#S -->   Is an instance (object) of the class Gmatrix. It representes the Hartree-Fock Self energy
+#v--> Parameter related with self-energy.
 #interpol
 # beta is the thermal energy (kb.T)^-1
 #  particle : 0--> boson, 1--> fermion
@@ -373,7 +373,7 @@ def matsubara_branch_init_gw0_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, Pk, S
 def matsubara_branch_init_hf_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, S, v, interpol, beta=1, particle=0, mu_jump=0.5, max_iter=100000, tol=1e-6):
     print("Initilizing Matsubara branch")
     ntau = Gloc.get_mat().shape[0] # .get_mat() returns self.GM = np.zeros((ntau, orb, orb), dtype=np.complex128) ( dim=3 array) 
-    # norb = Gloc.get_mat().shape[1]
+    #  norb = Gloc.get_mat().shape[1]
     nkvec = len(Gk)
     particle_sign = (-1)**particle
     
@@ -388,7 +388,9 @@ def matsubara_branch_init_hf_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, S, v, 
         print("Starting Matsubara loop for mu="+float_string(mu, 5))
         while conv>=tol:
             
-            S.set_hf_loc(0, -particle_sign * matrix_tensor(Gloc.get_mat()[-1], v-np.swapaxes(v, -1, -2))) #Eq.172  #This defines de Hartree-Fock self-energy at (imaginary?)time 0.
+            S.set_hf_loc(0, -particle_sign * matrix_tensor(Gloc.get_mat()[-1], v-np.swapaxes(v, -1, -2))) #Eq.172  
+            # numpy.swapaxes(a, axis1, axis2)[source] --> Interchange two axes of an input array a-
+            #This defines de Hartree-Fock self-energy at (imaginary?)time 0.
               # def set_hf_loc(self, t, arr):
             # assert arr.shape == self.Ghf[0].shape
              #self.Ghf[t] = arr
@@ -405,7 +407,7 @@ def matsubara_branch_init_hf_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, S, v, 
             assert not np.any(np.isnan(Hk0))
                 g,no_use = g_nonint_init(ntau, -1, mu, HkMF, beta, particle)
                 #g--> green functions matrix , no_use--> mu (chemical potential)
-                Gk[kk].set_mat(g)
+                Gk[kk].set_mat(g) # set_mat(self, g): 1. assert g.shape == self.GM.shape --> 2. self.GM = np.copy(g)
                 newGlocM += Gk[kk].get_mat() / nkvec
             # print("Gloc set")
             
@@ -419,7 +421,7 @@ def matsubara_branch_init_hf_kspace(N, mu, lattice, H0, H0_kin, Gk, Gloc, S, v, 
         print("Convergence for Matsubara branch and mu="+float_string(mu, 5))
         print("Norm "+exp_string(conv, 5)+"\n\n")
         
-        N0 = -np.trace(Gloc.get_mat()[-1])
+        N0 = -np.trace(Gloc.get_mat()[-1]) ## N0=-tr (G^M(beta))
         DN = N - N0.real
         DNsign = sgn(DN)
         if abs(DN) < tol:
