@@ -39,6 +39,7 @@ class Lattice:
         mesh_vec = self[idx]
         # print("Mesh vector got")
         return mesh_vec[0]*self.basis1/self.nk1 + mesh_vec[1]*self.basis2/self.nk2 + mesh_vec[2]*self.basis3/self.nk3
+            # Returns a normalized wave vector
         # print("I will return", ret)
         # return ret
     
