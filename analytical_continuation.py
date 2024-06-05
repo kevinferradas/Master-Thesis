@@ -44,7 +44,8 @@ def pade_expansion_ls(npoles, z, y, tol=1e-8):
 
         # Check for convergence
         convsq = 0
-        for k in range(Ndata):
+        #for k in range(Ndata):
+        for k in range(Nparam):
             convsq += delta_coefs[k].real * delta_coefs[k].real + delta_coefs[k].imag * delta_coefs[k].imag
         conv = np.sqrt(convsq)
     # pade_coefs[:npoles] returns coefficients until the position npoles-1 (does not consider the one in npoles position)-->a
