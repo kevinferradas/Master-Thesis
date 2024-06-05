@@ -2,28 +2,31 @@ import numpy as np
 from numba import njit
 from .linalg import matrix_matrix
 
+# z and y are 1-dim arrays of the same length 
+# z represents the "x" variable (independent variable). In this case, the matsubara frequency?
+# npoles is the number of poles of what?
 
 
 @njit
 def pade_expansion_ls(npoles, z, y, tol=1e-8):
     assert z.ndim==1 and y.ndim==1
-    assert z.size == y.size
+    assert z.size == y.size # numpy.size() function count the number of elements along a given axis.
 
     pade_coefs = np.ones((2*npoles,), dtype=np.complex128)
 
     Ndata = z.size
-    Nparam = pade_coefs.size
+    Nparam = pade_coefs.size # N param= 2*npoles
     
     conv = 1e5
     while conv>tol: # Condition must be take into account convergence
-        jacobian = np.zeros((Ndata,Nparam), dtype=np.complex128)
+        jacobian = np.zeros((Ndata,Nparam), dtype=np.complex128) # Jacobian is Ndata x Nparam matrix.
         P = np.zeros((Ndata), dtype=np.complex128)
         Q = np.ones((Ndata), dtype=np.complex128)
         for i in range(Ndata):
             for l in range(npoles):
-                Q[i] += pade_coefs[npoles+l] * z[i]**(l+1)
-                P[i] += pade_coefs[l] * z[i]**l
-            for j in range(npoles):
+                Q[i] += pade_coefs[npoles+l] * z[i]**(l+1) #  stores the value of Q(x) for each data value. 
+                P[i] += pade_coefs[l] * z[i]**l  #  stores the value of P(x) for each data value. 
+            for j in range(npoles): # equations (154) 
                 jacobian[i,j] = z[i]**j / Q[i]
                 jacobian[i,j+npoles] = -z[i]**(j+1) * P[i] / Q[i]**2
         
