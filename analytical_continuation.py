@@ -32,6 +32,7 @@ def pade_expansion_ls(npoles, z, y, tol=1e-8):
                 jacobian[i,j+npoles] = -z[i]**(j+1) * P[i] / Q[i]**2
         
         delta_coefs = np.zeros_like(pade_coefs)
+        #matrix_matrix(a, b) returns a matrix c= a.b ( product of matrices)
         meta_jacobian = matrix_matrix(np.linalg.inv(matrix_matrix(jacobian.T, jacobian)), jacobian.T)
         for s in range(Nparam):
             for r in range(Ndata):
