@@ -26,6 +26,7 @@ def pade_expansion_ls(npoles, z, y, tol=1e-8):
             for l in range(npoles):
                 Q[i] += pade_coefs[npoles+l] * z[i]**(l+1) #  stores the value of Q(x) for each data value. 
                 P[i] += pade_coefs[l] * z[i]**l  #  stores the value of P(x) for each data value. 
+                # It can be seen that the degree of Q(x) is one unit greater than the degree of P(x).
             for j in range(npoles): # equations (154) 
                 jacobian[i,j] = z[i]**j / Q[i]
                 jacobian[i,j+npoles] = -z[i]**(j+1) * P[i] / Q[i]**2
