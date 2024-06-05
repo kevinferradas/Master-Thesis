@@ -6,3 +6,4 @@ from .matsubara_init import matsubara_branch_init, matsubara_branch_init_gw0, ma
 from .bootstrap import boot_loop_gw, boot_loop_gw0, boot_loop_gw0_kspace, boot_loop_hf_kspace
 from .stepping import step_loop_gw, step_loop_gw0, step_loop_gw0_kspace, step_loop_hf_kspace
 from .lattice import Lattice
+from .analytical_continuation import pade_expansion_ls, pade_continuation
