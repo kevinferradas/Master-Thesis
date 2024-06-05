@@ -47,15 +47,21 @@ def pade_expansion_ls(npoles, z, y, tol=1e-8):
         for k in range(Ndata):
             convsq += delta_coefs[k].real * delta_coefs[k].real + delta_coefs[k].imag * delta_coefs[k].imag
         conv = np.sqrt(convsq)
-    
+    # pade_coefs[:npoles] returns coefficients until the position npoles-1 (does not consider the one in npoles position)-->a
+    #pade_coefs[npoles:] returns coeff from npoles position to the final element--> b
     return pade_coefs[:npoles], np.append(np.array([1.+0.j]),pade_coefs[npoles:])
+    #a=[a0,a1,a2,..,a_(npoles-1)]
+    #b=[1,b1,b2,b3,...,b_npoles]
+    # a.size = b.size + 1
 
 
 @njit
+#a is the list of coefficients for P(x)
+#b is the list of coefficientes for Q(x)
 def pade_continuation(x, a, b):
     Ndata = x.size
-    P = np.zeros((Ndata,Ndata), dtype=np.complex128)
-    Q = np.zeros((Ndata,Ndata), dtype=np.complex128)
+    P = np.zeros((Ndata,), dtype=np.complex128)
+    Q = np.zeros((Ndata,), dtype=np.complex128)
     
     for r in range(a.size):
         P += a[r] * x**r
