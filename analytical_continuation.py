@@ -51,8 +51,9 @@ def pade_expansion_ls(npoles, z, y, tol=1e-8):
     # pade_coefs[:npoles] returns coefficients until the position npoles-1 (does not consider the one in npoles position)-->a
     #pade_coefs[npoles:] returns coeff from npoles position to the final element--> b
     return pade_coefs[:npoles], np.append(np.array([1.+0.j]),pade_coefs[npoles:])
-    #a=[a0,a1,a2,..,a_(npoles-1)]
-    #b=[1,b1,b2,b3,...,b_npoles]
+    
+    #a=[a0,a1,a2,..,a_(npoles-1)] --> a= pade_expansion_ls(npoles, z, y, tol=1e-8)[0]
+    #b=[1,b1,b2,b3,...,b_npoles] --> b= pade_expansion_ls(npoles, z, y, tol=1e-8)[1]
     # a.size = b.size + 1
 
 
