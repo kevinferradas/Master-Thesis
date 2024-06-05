@@ -3,7 +3,8 @@ from numba import njit
 from .linalg import matrix_matrix
 
 # z and y are 1-dim arrays of the same length 
-# z represents the "x" variable (independent variable). In this case, the matsubara frequency?
+# z represents the "x" variable (independent variable). In this case, the matsubara frequency.
+# y represents the dependent variable. In this case, the Matsubara green function for an specific frequency.
 # npoles is the number of poles of what?
 
 
@@ -31,14 +32,15 @@ def pade_expansion_ls(npoles, z, y, tol=1e-8):
                 jacobian[i,j] = z[i]**j / Q[i]
                 jacobian[i,j+npoles] = -z[i]**(j+1) * P[i] / Q[i]**2
         
-        delta_coefs = np.zeros_like(pade_coefs)
+        delta_coefs = np.zeros_like(pade_coefs) #delta beta
         #matrix_matrix(a, b) returns a matrix c= a.b ( product of matrices)
-        meta_jacobian = matrix_matrix(np.linalg.inv(matrix_matrix(jacobian.T, jacobian)), jacobian.T)
+        #jacobian.T is the transpose of jacobian.
+        meta_jacobian = matrix_matrix(np.linalg.inv(matrix_matrix(jacobian.T, jacobian)), jacobian.T) # eq. (152)
         for s in range(Nparam):
             for r in range(Ndata):
-                delta_coefs[s] += meta_jacobian[s,r] * (y[r] - P[r]/Q[r])
+                delta_coefs[s] += meta_jacobian[s,r] * (y[r] - P[r]/Q[r]) # eq.(152)
         
-        pade_coefs += delta_coefs
+        pade_coefs += delta_coefs # beta (k+1)=beta (k) + delta beta
 
         # Check for convergence
         convsq = 0
