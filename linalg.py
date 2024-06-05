@@ -26,7 +26,7 @@ def matrix_matrix(a, b):
     for ii in range(a.shape[0]):
         for jj in range(a.shape[1]):
             for kk in range(b.shape[1]):
-                c[ii,kk] += a[ii,jj] * b[jj,kk]
+                c[ii,kk] += a[ii,jj] * b[jj,kk] # C=AB (Product of matrices)
     
     return c
 
